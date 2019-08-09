@@ -1,0 +1,26 @@
+{
+  "name": "study_mongodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "crud.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyw017763/Study_MongoDB.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kyw017763/Study_MongoDB/issues"
+  },
+  "homepage": "https://github.com/kyw017763/Study_MongoDB#readme",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.3.0-beta2",
+    "mongoose": "^5.6.6"
+  }
+}
