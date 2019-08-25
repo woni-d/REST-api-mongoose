@@ -26,25 +26,23 @@ router.get('/', function(req, res) {
 });
 // User 조회
 router.get('/:id', function(req, res) {
-    console.log(req.params.id);
     User.findOne({_id: req.params.id}, function (err, user) {
         if (err) return res.status(500).send("User 조회 실패");
         if (!user) return res.status(404).send("User 없음.");
-        res.status(200).send(user).end();
+        let u = JSON.stringfy(user);
+        res.status(200).send(u).end();
     });
 });
 // User 삭제
 router.delete('/:id', function (req, res) {
-    console.log(req.params.id);
     User.deleteOne({_id: req.params.id}, function (err, user) {
         if (err) return res.status(500).send("User 삭제 실패");
-        res.status(200).send("User 삭제됨.");
+        res.status(200).send("User "+ user.name +" 삭제됨.");
     });
 });
 // User 수정
 router.put('/:id', function (req, res) {    
-    console.log(req.params.id);
-    User.updateOne({_id: req.params.id}, {
+    User.findOneAndUpdate({_id: req.params.id}, {
         $set :{
         name: req.body.name,
         email: req.body.email,
@@ -52,7 +50,8 @@ router.put('/:id', function (req, res) {
         }
     }, {returnNewDocument: true}, function (err, user) {
         if (err) return res.status(500).send("User 수정 실패.");
-        res.status(200).send(user).end();
+        let u = JSON.stringfy(user);
+        res.status(200).send(u).end();
     });
 });
 module.exports = router;
