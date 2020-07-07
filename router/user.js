@@ -4,7 +4,7 @@ const User = require('../model/User');
 const router = express.Router();
 
 // User 전체 조회
-router.get('/', async function(req, res) {
+router.get('/', async (req, res) => {
     try {
         const users = await User.getUserList();
         res.status(200).send(users);
@@ -15,11 +15,15 @@ router.get('/', async function(req, res) {
 });
 
 // User 조회
-router.get('/:id', async function(req, res) {
+router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await User.getUser();
-        res.status(200).send(user);
+        const user = await User.getUser(id);
+        if (user) {
+            res.status(200).send(user);
+        } else {
+            res.status(400).end();
+        }
     } catch (err) {
         console.log(err);
         res.status(500).send("GET /users/:id was failed");
@@ -27,7 +31,7 @@ router.get('/:id', async function(req, res) {
 });
 
 // User 생성
-router.post('/', async function(req, res) {
+router.post('/', async (req, res) => {
     try {
         await User.createUser(req.body);
         res.status(201).send();
@@ -38,7 +42,7 @@ router.post('/', async function(req, res) {
 });
 
 // User 수정
-router.put('/:id', async function (req, res) {    
+router.put('/:id', async (req, res) => {    
     try {
         const { id } = req.params;
         await User.updateUser({ userId: id, ...req.body });
@@ -50,7 +54,7 @@ router.put('/:id', async function (req, res) {
 });
 
 // User 삭제
-router.delete('/:id', async function (req, res) {
+router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         await User.deleteUser(id);
