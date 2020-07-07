@@ -21,7 +21,7 @@ UserSchema.statics.createUser = function (param) {
 
 UserSchema.statics.updateUser = function (param) {
   const { userId, name, email, password } = param;
-  return this.findOneAndUpdate(
+  return this.updateOne(
       { _id: userId },
       { $set: { name, email, password } }, 
       { new: true }
@@ -29,7 +29,7 @@ UserSchema.statics.updateUser = function (param) {
 }
 
 UserSchema.statics.deleteUser = function (userId) {
-  return this.findOneAndDelete({ _id: userId });
+  return this.deleteOne({ _id: userId });
 }
 
 module.exports = mongoose.model('users', UserSchema);

@@ -18,26 +18,37 @@ module.exports = router;
  *  get:
  *    summary: User 전체 조회
  *    tags: [User]
- *    response:
+ *    responses:
  *      200:
- *        description: 성공
+ *        description: 전체 조회
+ *        examples:
+ *          application/json: |
+ *            [
+ *              {
+ *                "_id": "5f040e2d44433b0f37bd62b8",
+ *                "name": "Yewon Kim",
+ *                "email": "1234@naver.com",
+ *                "password": "asdf1234",
+ *                "__v": 0
+ *              }
+ *            ]
+ *            
  *      500:
- *        $ref: '#/components/res/INTERVAL_ERROR'
+ *        description: 전체 조회
  */
 router.get('/', async (req, res) => {
     try {
         const users = await User.getUserList();
-        res.status(500).send("GET /users was failed");
-        // res.status(200).send(users);
-        // next(new INVALID_REQUEST("안녕!"));
+        res.status(200).send(users);
     } catch (err) {
         console.log(err);
+        res.status(500).send("GET /users was failed");
     }
 });
 
 /**
  * @swagger
- * /users/:id:
+ * /users/{id}:
  *  get:
  *    summary: User 조회
  *    tags: [User]
@@ -46,13 +57,13 @@ router.get('/', async (req, res) => {
  *        name: id
  *        type: string
  *        description: 사용자 아이디 전달
- *    response:
+ *    responses:
  *      200:
- *        description: 성공
+ *        description: 조회 성공
  *      400:
- *        $ref: '#/components/res/INVALID_REQUEST'
+ *        description: 필수 파라미터가 잘못 전달됨
  *      500:
- *        $ref: '#/components/res/INTERVAL_ERROR'
+ *        description: 조회 실패
  */
 router.get('/:id', async (req, res) => {
     try {
@@ -76,26 +87,25 @@ router.get('/:id', async (req, res) => {
  *    summary: User 생성
  *    tags: [User]
  *    parameters:
- *      - in: body
- *        name: user
- *        type: object
- *        required:
- *          - name
- *          - email
- *          - password
- *        description: 새로운 유저의 이름, 이메일, 패스워드 전달
- *        propertise:
- *          name:
- *            type: string
- *          email:
- *            type: string
- *          password:
- *            type: string
- *    response:
+ *     - in: body
+ *       name: user
+ *       description: The user to create.
+ *       schema:
+ *         type: object
+ *         required:
+ *           - userName
+ *         properties:
+ *           name:
+ *             type: string
+ *           email:
+ *             type: string
+ *           password:
+ *             type: string
+ *    responses:
  *      201:
  *        description: 생성 성공
  *      500:
- *        $ref: '#/components/res/INTERVAL_ERROR'
+ *        description: 생성 실패
  */
 router.post('/', async (req, res) => {
     try {
@@ -109,7 +119,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /users/:id:
+ * /users/{id}:
  *  put:
  *    summary: User 수정
  *    tags: [User]
@@ -120,29 +130,27 @@ router.post('/', async (req, res) => {
  *        description: 사용자 아이디 전달
  *      - in: body
  *        name: user
- *        type: object
- *        required:
- *          - name
- *          - email
- *          - password
- *        description: 새로운 유저의 이름, 이메일, 패스워드 전달
- *        propertise:
- *          name:
- *            type: string
- *          email:
- *            type: string
- *          password:
- *            type: string
- *    response:
+ *        description: The user to update.
+ *        schema:
+ *          type: object
+ *          required:
+ *            - userName
+ *          properties:
+ *            name:
+ *              type: string
+ *            email:
+ *              type: string
+ *            password:
+ *              type: string
+ *    responses:
  *      200:
  *        description: 수정 성공
  *      500:
- *        $ref: '#/components/res/INTERVAL_ERROR'
+ *        description: 수정 실패
  */
 router.put('/:id', async (req, res) => {    
     try {
         const { id } = req.params;
-        console.log(req.body);
         await User.updateUser({ userId: id, ...req.body });
         res.status(200).send();
     } catch (err) {
@@ -153,7 +161,7 @@ router.put('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /users/:id:
+ * /users/{id}:
  *  delete:
  *    summary: User 삭제
  *    tags: [User]
@@ -162,11 +170,11 @@ router.put('/:id', async (req, res) => {
  *        name: id
  *        type: string
  *        description: 사용자 아이디 전달
- *    response:
+ *    responses:
  *      200:
- *        description: 수정 삭제
+ *        description: 삭제 성공
  *      500:
- *        $ref: '#/components/res/INTERVAL_ERROR'
+ *        description: 삭제 실패
  */
 router.delete('/:id', async (req, res) => {
     try {
