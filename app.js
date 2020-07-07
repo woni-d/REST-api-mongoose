@@ -1,7 +1,11 @@
 const express = require('express');
+const User = require('./router/user');
+
+require('./model/connection');
+
 const app = express();
-const UserController = require('./UserController');
-app.use('/', UserController);
+app.use(express.urlencoded({ extended: true }));
+app.use('/users', User);
 
 const port = 3000;
 
